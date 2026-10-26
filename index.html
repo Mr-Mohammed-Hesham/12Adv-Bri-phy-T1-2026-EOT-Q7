@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚡ Continuous Charge Distributions - فيزياء 12 بريدج | Mr. Mohammed Hesham</title>
+<meta name="description" content="امتحان تفاعلي شامل عن توزيعات الشحنات المستمرة والمجال الكهربائي - فيزياء 12 بريدج">
+<meta name="author" content="Mr. Mohammed Hesham">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); }
+body.en-mode { font-family: 'Inter', sans-serif; }
+.arabic-math { font-family: 'Amiri', 'Cairo', serif; }
+.correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
+.incorrect { background-color: #fee2e2 !important; border-color: #dc2626 !important; }
+.timer-warning { color: #dc2626 !important; animation: pulse 1s infinite; }
+@keyframes pulse { 50% { opacity: 0.7; } }
+@media print { .no-print { display: none !important; } }
+.success-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.875rem; }
+.grade-excellent { background: #dcfce7; color: #166534; }
+.grade-good { background: #fef3c7; color: #92400e; }
+.grade-pass { background: #dbeafe; color: #1e40af; }
+.grade-fail { background: #fee2e2; color: #991b1b; }
+.lang-switch { position: fixed; top: 16px; left: 16px; z-index: 100; background: white; padding: 6px; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; gap: 4px; border: 2px solid #d97706; }
+[dir="ltr"] .lang-switch { left: auto; right: 16px; }
+.lang-btn { padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: all 0.3s; border: none; font-size: 0.875rem; background: transparent; color: #6b7280; }
+.lang-btn.active { background: #d97706; color: white; box-shadow: 0 2px 6px rgba(217,119,6,0.4); }
+.shuffle-badge { display: inline-block; background: linear-gradient(135deg, #d97706, #b45309); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; margin-right: 8px; }
+.math-display { display: inline-block; direction: ltr; font-family: 'Amiri', serif; font-size: 1.2em; padding: 2px 8px; background: #fef3c7; border-radius: 6px; margin: 2px; color: #92400e; font-weight: 600; }
+.save-indicator { position: fixed; bottom: 20px; left: 20px; z-index: 200; background: #10b981; color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+.save-indicator.show { opacity: 1; }
+.formula-box { background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 12px; margin: 10px 0; font-family: 'Amiri', serif; direction: ltr; text-align: center; }
+.svg-graph { display: block; margin: 12px auto; background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 8px; }
+.graph-container { text-align: center; margin: 10px 0; }
+.module-badge { display: inline-block; padding: 4px 16px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; margin-bottom: 8px; }
+.module-1 { background: #fef3c7; color: #92400e; }
+.module-2 { background: #dbeafe; color: #1e40af; }
+.module-3 { background: #fce7f3; color: #9f1239; }
+.module-4 { background: #ecfdf5; color: #065f46; }
+.module-5 { background: #ede9fe; color: #5b21b6; }
+.module-6 { background: #fee2e2; color: #991b1b; }
+</style>
+</head>
+<body class="p-4 md:p-8 min-h-screen">
+
+<div class="lang-switch no-print">
+<button class="lang-btn active" onclick="setLanguage('ar')" id="btn-ar">عربي</button>
+<button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+</div>
+
+<div id="saveIndicator" class="save-indicator">💾 <span data-ar="تم الحفظ" data-en="Saved">تم الحفظ</span></div>
+
+<div id="timer-container" class="max-w-5xl mx-auto mb-4 text-center no-print">
+<div class="bg-white p-4 rounded-2xl shadow-lg inline-block border-2 border-amber-100">
+<span class="text-gray-600 ml-2">⏰ الوقت المتبقي:</span>
+<span id="timer" class="text-2xl font-bold text-amber-700 font-mono">90:00</span>
+<span class="shuffle-badge">⚡ Continuous Charge Distributions - 30 سؤال</span>
+</div>
+</div>
+
+<div class="max-w-5xl mx-auto mb-6 flex flex-wrap gap-3 justify-center no-print">
+<button onclick="toggleAnswers()" class="bg-amber-700 hover:bg-amber-800 text-white px-5 py-2 rounded-xl font-medium transition shadow">👀 إظهار/إخفاء الإجابات</button>
+<button onclick="window.print()" class="bg-gray-700 hover:bg-gray-900 text-white px-5 py-2 rounded-xl font-medium transition shadow">🖨️ طباعة</button>
+<button onclick="reshuffleExam()" class="bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white px-5 py-2 rounded-xl font-medium transition shadow">🔄 أسئلة جديدة</button>
+<button onclick="clearProgress()" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-medium transition shadow">🗑️ مسح التقدم</button>
+</div>
+
+<header class="max-w-5xl mx-auto bg-white p-8 rounded-3xl shadow-2xl mb-8 border-4 border-amber-500">
+<div class="text-center">
+<div class="inline-block bg-amber-700 text-white px-6 py-2 rounded-full text-sm font-bold mb-4">PHYSICS 12 BRIDGE - QUESTION 7</div>
+<h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">⚡ توزيعات الشحنات المستمرة والمجال الكهربائي</h1>
+<h2 class="text-xl text-amber-700 font-semibold mb-2">فيزياء 12 متقدم بريدج</h2>
+<p class="text-gray-600 mb-4">Continuous Charge Distributions & Electric Field Integration</p>
+<p class="text-sm text-green-600 font-semibold">💾 يتم حفظ تقدمك تلقائياً - 30 سؤالاً في 6 أقسام</p>
+</div>
+<div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+<span>📅 التاريخ: <input type="text" id="examDate" class="border-b-2 border-amber-300 bg-transparent w-32 text-center"></span>
+<span>😊 الاسم: <input type="text" id="studentName" class="border-b-2 border-amber-300 bg-transparent w-40 text-center" placeholder="اكتب اسمك"></span>
+<span>🏫 الشعبة: <input type="text" id="studentClass" class="border-b-2 border-amber-300 bg-transparent w-32 text-center" placeholder="الشعبة"></span>
+<span>⏰ المدة: 90 دقيقة</span>
+<span>📊 المجموع: 100 درجة</span>
+</div>
+</header>
+
+<div class="max-w-5xl mx-auto mb-6 bg-white p-4 rounded-xl shadow-lg border-2 border-amber-200 no-print">
+<h3 class="font-bold text-lg mb-3 text-amber-800 text-center">📐 القوانين الأساسية</h3>
+<div class="grid md:grid-cols-3 gap-3 text-sm">
+<div class="formula-box"><strong>Linear:</strong> dq = λdx (C/m)</div>
+<div class="formula-box"><strong>Surface:</strong> dq = σdA (C/m²)</div>
+<div class="formula-box"><strong>Volume:</strong> dq = ρdV (C/m³)</div>
+<div class="formula-box"><strong>dE = k·dq/r²</strong></div>
+<div class="formula-box"><strong>E = ∫dE (Integration)</strong></div>
+<div class="formula-box"><strong>Superposition Principle</strong></div>
+</div>
+</div>
+
+<main class="max-w-5xl mx-auto space-y-8" id="exam-content"></main>
+
+<div class="text-center no-print pb-8 mt-8">
+<button onclick="gradeExam()" class="bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white text-lg px-12 py-4 rounded-2xl font-bold shadow-xl transition transform hover:scale-105"> صحح إجاباتي!</button>
+</div>
+
+<div id="results-panel" class="max-w-5xl mx-auto mt-8 bg-white p-8 rounded-3xl shadow-2xl border-4 border-amber-500 hidden no-print">
+<h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">🏆 نتيجتك يا بطل! </h2>
+<div class="grid md:grid-cols-3 gap-4 mb-6">
+<div class="bg-amber-50 p-4 rounded-xl text-center"><p>😊 الاسم</p><p id="res-name" class="font-bold text-xl text-amber-700">-</p></div>
+<div class="bg-orange-50 p-4 rounded-xl text-center"><p>📅 التاريخ</p><p id="res-date" class="font-bold text-xl text-orange-700">-</p></div>
+<div class="bg-amber-50 p-4 rounded-xl text-center"><p>🌟 المجموع</p><p id="res-total" class="font-bold text-3xl text-amber-700">0 / 100</p></div>
+</div>
+<div class="text-center mb-6">
+<span id="success-badge" class="success-badge grade-excellent">-</span>
+<p id="success-percent" class="text-4xl font-bold text-amber-700 mt-2">0%</p>
+<p class="text-sm text-gray-500">نسبة النجاح</p>
+</div>
+<div class="bg-gray-50 p-6 rounded-xl mb-6">
+<h3 class="font-bold text-lg mb-4 text-gray-800"> أدائك في كل قسم:</h3>
+<div class="space-y-3" id="sections-performance"></div>
+</div>
+<div class="text-center">
+<button id="sendEmailBtn" onclick="sendResultsToEmail()" class="bg-gradient-to-r from-amber-700 to-orange-600 text-white text-lg px-8 py-3 rounded-2xl font-bold shadow-xl transition">📧 أرسل النتيجة للمعلم</button>
+<p id="emailStatus" class="text-sm mt-2 text-center font-medium"></p>
+</div>
+</div>
+
+<footer class="max-w-5xl mx-auto mt-10 mb-8 text-center text-gray-500 text-sm no-print">
+© Continuous Charge Distributions - Grade 12 Bridge | Mr. Mohammed Hesham ⚡
+</footer>
+
+<script>
+const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
+const SERVICE_ID = "service_w15m64i";
+const TEMPLATE_ID = "template_5b0u2tq";
+const TARGET_EMAIL = "mohammedhesham872@gmail.com";
+emailjs.init(PUBLIC_KEY);
+
+const STORAGE_KEY = 'continuous_charge_distributions_grade12_v1';
+const TOTAL_TIME = 5400;
+const TOTAL_QUESTIONS = 30;
+const TOTAL_SECTIONS = 6;
+const QUESTIONS_PER_SECTION = 5;
+
+let currentSeed = null;
+let answersVisible = false;
+let saveIndicatorTimeout = null;
+let currentLang = 'ar';
+let timeRemaining = TOTAL_TIME;
+let timerInterval;
+let examData;
+let correctAnswersMap = {};
+let rng = null;
+
+function mulberry32(a) {
+    return function() {
+        var t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    }
+}
+
+function showSaveIndicator() {
+    const indicator = document.getElementById('saveIndicator');
+    indicator.classList.add('show');
+    if (saveIndicatorTimeout) clearTimeout(saveIndicatorTimeout);
+    saveIndicatorTimeout = setTimeout(() => indicator.classList.remove('show'), 1500);
+}
+
+function saveState(showIndicator = true) {
+    try {
+        const state = {
+            seed: currentSeed, lang: currentLang,
+            studentName: document.getElementById('studentName').value,
+            studentClass: document.getElementById('studentClass').value,
+            examDate: document.getElementById('examDate').value,
+            answers: getSelectedAnswers(),
+            timeRemaining: timeRemaining,
+            answersVisible: answersVisible, savedAt: Date.now()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        if (showIndicator) showSaveIndicator();
+    } catch (e) { console.error('Save error:', e); }
+}
+
+function loadState() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        return saved ? JSON.parse(saved) : null;
+    } catch (e) { return null; }
+}
+
+function getSelectedAnswers() {
+    const answers = {};
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+        const selected = document.querySelector('input[name="q'+i+'"]:checked');
+        if (selected) answers[i] = selected.value;
+    }
+    return answers;
+}
+
+function restoreAnswers(answers) {
+    if (!answers) return;
+    for (const [idx, val] of Object.entries(answers)) {
+        const radio = document.querySelector('input[name="q'+idx+'"][value="'+val+'"]');
+        if (radio) radio.checked = true;
+    }
+}
+
+function clearProgress() {
+    const msg = currentLang === 'ar' ? '⚠️ هل أنت متأكد من مسح كل التقدم؟' : '⚠️ Clear all progress?';
+    if (confirm(msg)) { localStorage.removeItem(STORAGE_KEY); location.reload(); }
+}
+
+function setupAnswerListeners() {
+    document.getElementById('exam-content').addEventListener('change', (e) => {
+        if (e.target.type === 'radio') saveState();
+    });
+}
+
+function setupInputListeners() {
+    ['studentName', 'studentClass', 'examDate'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', () => saveState(false));
+            el.addEventListener('blur', () => saveState());
+        }
+    });
+}
+
+// ==================== SVG Diagrams ====================
+const svgGraphs = {
+    charge_densities: `<svg class="svg-graph" width="400" height="260" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="250" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">📊 أنواع كثافات الشحنة</text>
+        <rect x="20" y="45" width="110" height="90" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="75" y="65" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Linear (λ)</text>
+        <text x="75" y="85" text-anchor="middle" font-size="10" fill="#92400e">C/m</text>
+        <line x1="40" y1="105" x2="110" y2="105" stroke="#92400e" stroke-width="3"/>
+        <text x="75" y="125" text-anchor="middle" font-size="9" fill="#92400e">dq = λdx</text>
+        <rect x="145" y="45" width="110" height="90" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="200" y="65" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Surface (σ)</text>
+        <text x="200" y="85" text-anchor="middle" font-size="10" fill="#92400e">C/m²</text>
+        <rect x="165" y="100" width="70" height="25" fill="#fde68a" stroke="#92400e" stroke-width="2"/>
+        <text x="200" y="125" text-anchor="middle" font-size="9" fill="#92400e">dq = σdA</text>
+        <rect x="270" y="45" width="110" height="90" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="325" y="65" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Volume (ρ)</text>
+        <text x="325" y="85" text-anchor="middle" font-size="10" fill="#92400e">C/m³</text>
+        <rect x="295" y="100" width="60" height="25" fill="#fde68a" stroke="#92400e" stroke-width="2"/>
+        <text x="325" y="125" text-anchor="middle" font-size="9" fill="#92400e">dq = ρdV</text>
+        <rect x="20" y="150" width="360" height="90" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="200" y="175" text-anchor="middle" font-size="12" fill="#92400e" font-weight="bold">Electric Field from Continuous Distribution</text>
+        <text x="200" y="200" text-anchor="middle" font-size="11" fill="#92400e" font-family="'Amiri', serif">dE = k·dq/r²</text>
+        <text x="200" y="220" text-anchor="middle" font-size="11" fill="#92400e" font-family="'Amiri', serif">E = ∫dE (integrate over entire charge)</text>
+    </svg>`,
+    
+    charged_wire: `<svg class="svg-graph" width="400" height="280" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="270" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="bold"> سلك مستقيم مشحون - Charged Wire</text>
+        <line x1="50" y1="200" x2="350" y2="200" stroke="#f59e0b" stroke-width="4"/>
+        <text x="50" y="220" font-size="11" fill="#1e40af" font-weight="bold">-a</text>
+        <text x="350" y="220" font-size="11" fill="#1e40af" font-weight="bold">+a</text>
+        <text x="200" y="220" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">0 (center)</text>
+        <circle cx="100" cy="200" r="3" fill="#ef4444"/>
+        <circle cx="150" cy="200" r="3" fill="#ef4444"/>
+        <circle cx="200" cy="200" r="3" fill="#ef4444"/>
+        <circle cx="250" cy="200" r="3" fill="#ef4444"/>
+        <circle cx="300" cy="200" r="3" fill="#ef4444"/>
+        <text x="200" y="240" text-anchor="middle" font-size="10" fill="#1e40af">dq = λdx (charge element)</text>
+        <circle cx="200" cy="100" r="8" fill="#2563eb" stroke="#1e40af" stroke-width="2"/>
+        <text x="215" y="95" font-size="11" fill="#1e40af" font-weight="bold">P(0,y)</text>
+        <line x1="200" y1="100" x2="250" y2="200" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow1)"/>
+        <text x="230" y="145" font-size="10" fill="#dc2626" font-weight="bold">r</text>
+        <text x="235" y="160" font-size="9" fill="#dc2626">r = √(x²+y²)</text>
+        <line x1="200" y1="100" x2="200" y2="200" stroke="#10b981" stroke-width="2" stroke-dasharray="4"/>
+        <text x="205" y="150" font-size="10" fill="#10b981" font-weight="bold">y</text>
+        <text x="200" y="260" text-anchor="middle" font-size="11" fill="#1e40af">dE = k·dq/r² = k·λdx/(x²+y²)</text>
+        <defs><marker id="arrow1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/></marker></defs>
+    </svg>`,
+    
+    field_components: `<svg class="svg-graph" width="400" height="280" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="270" rx="12" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#9f1239" font-weight="bold"> مركبات المجال الكهربائي</text>
+        <line x1="50" y1="200" x2="350" y2="200" stroke="#f59e0b" stroke-width="3"/>
+        <circle cx="200" cy="100" r="8" fill="#2563eb" stroke="#1e40af" stroke-width="2"/>
+        <text x="215" y="95" font-size="11" fill="#1e40af" font-weight="bold">P</text>
+        <line x1="200" y1="100" x2="280" y2="200" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow2)"/>
+        <text x="250" y="145" font-size="10" fill="#dc2626" font-weight="bold">dE</text>
+        <line x1="200" y1="100" x2="280" y2="100" stroke="#10b981" stroke-width="2" stroke-dasharray="3"/>
+        <line x1="280" y1="100" x2="280" y2="200" stroke="#10b981" stroke-width="2" stroke-dasharray="3"/>
+        <text x="240" y="95" font-size="10" fill="#10b981" font-weight="bold">dEₓ</text>
+        <text x="285" y="150" font-size="10" fill="#10b981" font-weight="bold">dEᵧ</text>
+        <text x="240" y="120" font-size="10" fill="#9f1239">θ</text>
+        <text x="200" y="230" text-anchor="middle" font-size="11" fill="#9f1239">dEₓ = dE·cos(θ) = dE·(x/r)</text>
+        <text x="200" y="250" text-anchor="middle" font-size="11" fill="#9f1239">dEᵧ = dE·sin(θ) = dE·(y/r)</text>
+        <text x="200" y="270" text-anchor="middle" font-size="10" fill="#9f1239">By symmetry, Eₓ = 0 for symmetric wire</text>
+        <defs><marker id="arrow2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/></marker></defs>
+    </svg>`,
+    
+    infinite_wire: `<svg class="svg-graph" width="400" height="260" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="250" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#065f46" font-weight="bold">♾️ سلك لا نهائي - Infinite Wire</text>
+        <line x1="50" y1="130" x2="350" y2="130" stroke="#f59e0b" stroke-width="4"/>
+        <text x="50" y="150" font-size="10" fill="#065f46">-∞</text>
+        <text x="350" y="150" font-size="10" fill="#065f46">+∞</text>
+        <text x="200" y="150" text-anchor="middle" font-size="10" fill="#065f46">λ (C/m)</text>
+        <circle cx="200" cy="60" r="8" fill="#2563eb" stroke="#1e40af" stroke-width="2"/>
+        <text x="215" y="55" font-size="11" fill="#1e40af" font-weight="bold">P</text>
+        <line x1="200" y1="60" x2="200" y2="130" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow3)"/>
+        <text x="210" y="100" font-size="10" fill="#dc2626" font-weight="bold">y</text>
+        <line x1="120" y1="60" x2="120" y2="130" stroke="#10b981" stroke-width="2" marker-end="url(#arrow4)"/>
+        <line x1="280" y1="60" x2="280" y2="130" stroke="#10b981" stroke-width="2" marker-end="url(#arrow4)"/>
+        <text x="200" y="180" text-anchor="middle" font-size="12" fill="#065f46" font-family="'Amiri', serif" font-weight="bold">E = 2kλ/y</text>
+        <text x="200" y="205" text-anchor="middle" font-size="11" fill="#065f46">For infinite wire (a → )</text>
+        <text x="200" y="225" text-anchor="middle" font-size="10" fill="#065f46">E ∝ 1/y (not 1/y²!)</text>
+        <text x="200" y="245" text-anchor="middle" font-size="10" fill="#065f46">Field decreases slower than point charge</text>
+        <defs><marker id="arrow3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/></marker>
+        <marker id="arrow4" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#10b981"/></marker></defs>
+    </svg>`,
+    
+    integration_setup: `<svg class="svg-graph" width="400" height="280" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="270" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#5b21b6" font-weight="bold">📝 إعداد التكامل - Integration Setup</text>
+        <rect x="20" y="45" width="360" height="50" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="200" y="65" text-anchor="middle" font-size="11" fill="#5b21b6" font-weight="bold">Step 1: Choose charge element dq</text>
+        <text x="200" y="85" text-anchor="middle" font-size="10" fill="#5b21b6">dq = λdx (for line), σdA (for surface), ρdV (for volume)</text>
+        <rect x="20" y="105" width="360" height="50" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="200" y="125" text-anchor="middle" font-size="11" fill="#5b21b6" font-weight="bold">Step 2: Write dE from Coulomb's Law</text>
+        <text x="200" y="145" text-anchor="middle" font-size="10" fill="#5b21b6" font-family="'Amiri', serif">dE = k·dq/r²</text>
+        <rect x="20" y="165" width="360" height="50" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="200" y="185" text-anchor="middle" font-size="11" fill="#5b21b6" font-weight="bold">Step 3: Resolve into components (dEₓ, dEᵧ)</text>
+        <text x="200" y="205" text-anchor="middle" font-size="10" fill="#5b21b6">Use symmetry to cancel components when possible</text>
+        <rect x="20" y="225" width="360" height="40" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="200" y="250" text-anchor="middle" font-size="11" fill="#5b21b6" font-weight="bold">Step 4: Integrate over entire charge distribution</text>
+    </svg>`,
+    
+    symmetry_cancellation: `<svg class="svg-graph" width="400" height="260" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="250" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#991b1b" font-weight="bold">⚖️ التماثل وإلغاء المركبات</text>
+        <line x1="100" y1="130" x2="300" y2="130" stroke="#f59e0b" stroke-width="3"/>
+        <circle cx="150" cy="130" r="4" fill="#ef4444"/>
+        <circle cx="250" cy="130" r="4" fill="#ef4444"/>
+        <text x="150" y="150" text-anchor="middle" font-size="9" fill="#991b1b">dq₁ at -x</text>
+        <text x="250" y="150" text-anchor="middle" font-size="9" fill="#991b1b">dq₂ at +x</text>
+        <circle cx="200" cy="60" r="8" fill="#2563eb" stroke="#1e40af" stroke-width="2"/>
+        <text x="215" y="55" font-size="11" fill="#1e40af" font-weight="bold">P(0,y)</text>
+        <line x1="200" y1="60" x2="150" y2="130" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow5)"/>
+        <line x1="200" y1="60" x2="250" y2="130" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow6)"/>
+        <text x="170" y="90" font-size="9" fill="#dc2626">dE₁</text>
+        <text x="225" y="90" font-size="9" fill="#dc2626">dE₂</text>
+        <line x1="150" y1="130" x2="200" y2="100" stroke="#10b981" stroke-width="1.5" stroke-dasharray="3"/>
+        <line x1="250" y1="130" x2="200" y2="100" stroke="#10b981" stroke-width="1.5" stroke-dasharray="3"/>
+        <text x="200" y="180" text-anchor="middle" font-size="11" fill="#991b1b">Horizontal components cancel (symmetry)</text>
+        <text x="200" y="200" text-anchor="middle" font-size="11" fill="#991b1b">Vertical components add up</text>
+        <text x="200" y="225" text-anchor="middle" font-size="12" fill="#991b1b" font-weight="bold">Eₓ = 0, Eᵧ = 2∫dEᵧ</text>
+        <defs><marker id="arrow5" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/></marker>
+        <marker id="arrow6" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/></marker></defs>
+    </svg>`
+};
+
+// ==================== EXAM DATA - 30 QUESTIONS ====================
+const originalExamData = {
+    sections: [
+        {
+            id: 'sec1',
+            title: { ar: '🔹 القسم 1: كثافات الشحنة (Q1-Q5)', en: '🔹 Section 1: Charge Densities (Q1-Q5)' },
+            questions: [
+                {
+                    q: { ar: 'ما وحدة الكثافة الخطية للشحنة λ؟', en: 'What is the unit of linear charge density λ?' },
+                    svg: svgGraphs.charge_densities,
+                    options: [
+                        { ar: '<span class="math-display">C/m</span> (كولوم/متر)', en: '<span class="math-display">C/m</span> (Coulomb/meter)' },
+                        { ar: '<span class="math-display">C/m²</span>', en: '<span class="math-display">C/m²</span>' },
+                        { ar: '<span class="math-display">C/m³</span>', en: '<span class="math-display">C/m³</span>' },
+                        { ar: '<span class="math-display">C</span>', en: '<span class="math-display">C</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'λ = Q/L (شحنة لكل وحدة طول) → C/m', en: 'λ = Q/L (charge per unit length) → C/m' }
+                },
+                {
+                    q: { ar: 'ما وحدة الكثافة السطحية للشحنة σ؟', en: 'What is the unit of surface charge density σ?' },
+                    options: [
+                        { ar: '<span class="math-display">C/m²</span>', en: '<span class="math-display">C/m²</span>' },
+                        { ar: '<span class="math-display">C/m</span>', en: '<span class="math-display">C/m</span>' },
+                        { ar: '<span class="math-display">C/m³</span>', en: '<span class="math-display">C/m³</span>' },
+                        { ar: '<span class="math-display">C</span>', en: '<span class="math-display">C</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'σ = Q/A (شحنة لكل وحدة مساحة) → C/m²', en: 'σ = Q/A (charge per unit area) → C/m²' }
+                },
+                {
+                    q: { ar: 'ما وحدة الكثافة الحجمية للشحنة ρ؟', en: 'What is the unit of volume charge density ρ?' },
+                    options: [
+                        { ar: '<span class="math-display">C/m³</span>', en: '<span class="math-display">C/m³</span>' },
+                        { ar: '<span class="math-display">C/m²</span>', en: '<span class="math-display">C/m²</span>' },
+                        { ar: '<span class="math-display">C/m</span>', en: '<span class="math-display">C/m</span>' },
+                        { ar: '<span class="math-display">C</span>', en: '<span class="math-display">C</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'ρ = Q/V (شحنة لكل وحدة حجم) → C/m³', en: 'ρ = Q/V (charge per unit volume) → C/m³' }
+                },
+                {
+                    q: { ar: 'سلك طوله 2 m يحمل شحنة كلية 6 μC موزعة بانتظام. ما λ؟', en: 'Wire of length 2 m carries total charge 6 μC uniformly. What is λ?' },
+                    options: [
+                        { ar: '<span class="math-display">3 μC/m</span>', en: '<span class="math-display">3 μC/m</span>' },
+                        { ar: '<span class="math-display">12 μC/m</span>', en: '<span class="math-display">12 μC/m</span>' },
+                        { ar: '<span class="math-display">1.5 μC/m</span>', en: '<span class="math-display">1.5 μC/m</span>' },
+                        { ar: '<span class="math-display">6 μC/m</span>', en: '<span class="math-display">6 μC/m</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'λ = Q/L = 6 μC / 2 m = 3 μC/m', en: 'λ = Q/L = 6 μC / 2 m = 3 μC/m' }
+                },
+                {
+                    q: { ar: 'لوح مساحته 0.5 m² يحمل شحنة 10 μC موزعة بانتظام. ما σ؟', en: 'Plate of area 0.5 m² carries charge 10 μC uniformly. What is σ?' },
+                    options: [
+                        { ar: '<span class="math-display">20 μC/m²</span>', en: '<span class="math-display">20 μC/m²</span>' },
+                        { ar: '<span class="math-display">5 μC/m²</span>', en: '<span class="math-display">5 μC/m²</span>' },
+                        { ar: '<span class="math-display">10 μC/m²</span>', en: '<span class="math-display">10 μC/m²</span>' },
+                        { ar: '<span class="math-display">2 μC/m²</span>', en: '<span class="math-display">2 μC/m²</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'σ = Q/A = 10 μC / 0.5 m² = 20 μC/m²', en: 'σ = Q/A = 10 μC / 0.5 m² = 20 μC/m²' }
+                }
+            ]
+        },
+        {
+            id: 'sec2',
+            title: { ar: '🔹 القسم 2: عنصر الشحنة dq (Q6-Q10)', en: '🔹 Section 2: Charge Element dq (Q6-Q10)' },
+            questions: [
+                {
+                    q: { ar: 'لعنصر طول dx على سلك بكثافة خطية λ، ما الشحنة dq؟', en: 'For length element dx on wire with linear density λ, what is charge dq?' },
+                    svg: svgGraphs.charged_wire,
+                    options: [
+                        { ar: '<span class="math-display">dq = λdx</span>', en: '<span class="math-display">dq = λdx</span>' },
+                        { ar: '<span class="math-display">dq = λ/dx</span>', en: '<span class="math-display">dq = λ/dx</span>' },
+                        { ar: '<span class="math-display">dq = λ·x</span>', en: '<span class="math-display">dq = λ·x</span>' },
+                        { ar: '<span class="math-display">dq = λ·dx²</span>', en: '<span class="math-display">dq = λ·dx²</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'dq = λdx (الشحنة = الكثافة × الطول)', en: 'dq = λdx (charge = density × length)' }
+                },
+                {
+                    q: { ar: 'لعنصر مساحة dA على سطح بكثافة σ، ما dq؟', en: 'For area element dA on surface with density σ, what is dq?' },
+                    options: [
+                        { ar: '<span class="math-display">dq = σdA</span>', en: '<span class="math-display">dq = σdA</span>' },
+                        { ar: '<span class="math-display">dq = σ/dA</span>', en: '<span class="math-display">dq = σ/dA</span>' },
+                        { ar: '<span class="math-display">dq = σ·A</span>', en: '<span class="math-display">dq = σ·A</span>' },
+                        { ar: '<span class="math-display">dq = σ·dA²</span>', en: '<span class="math-display">dq = σ·dA²</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'dq = σdA (الشحنة = الكثافة × المساحة)', en: 'dq = σdA (charge = density × area)' }
+                },
+                {
+                    q: { ar: 'لعنصر حجم dV في جسم بكثافة ρ، ما dq؟', en: 'For volume element dV in body with density ρ, what is dq?' },
+                    options: [
+                        { ar: '<span class="math-display">dq = ρdV</span>', en: '<span class="math-display">dq = ρdV</span>' },
+                        { ar: '<span class="math-display">dq = /dV</span>', en: '<span class="math-display">dq = ρ/dV</span>' },
+                        { ar: '<span class="math-display">dq = ρ·V</span>', en: '<span class="math-display">dq = ρ·V</span>' },
+                        { ar: '<span class="math-display">dq = ρ·dV²</span>', en: '<span class="math-display">dq = ρ·dV²</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'dq = dV (الشحنة = الكثافة × الحجم)', en: 'dq = ρdV (charge = density × volume)' }
+                },
+                {
+                    q: { ar: 'سلك بطول L وشحنة كلية Q موزعة بانتظام. ما λ؟', en: 'Wire of length L and total charge Q uniformly distributed. What is λ?' },
+                    options: [
+                        { ar: '<span class="math-display">λ = Q/L</span>', en: '<span class="math-display">λ = Q/L</span>' },
+                        { ar: '<span class="math-display">λ = Q·L</span>', en: '<span class="math-display">λ = Q·L</span>' },
+                        { ar: '<span class="math-display">λ = L/Q</span>', en: '<span class="math-display">λ = L/Q</span>' },
+                        { ar: '<span class="math-display">λ = Q/L²</span>', en: '<span class="math-display">λ = Q/L²</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'λ = Q/L (الكثافة الخطية = الشحنة الكلية ÷ الطول)', en: 'λ = Q/L (linear density = total charge  length)' }
+                },
+                {
+                    q: { ar: 'إذا كانت λ = 5 μC/m وطول السلك 0.4 m، ما الشحنة الكلية؟', en: 'If λ = 5 μC/m and wire length 0.4 m, what is total charge?' },
+                    options: [
+                        { ar: '<span class="math-display">2 μC</span>', en: '<span class="math-display">2 μC</span>' },
+                        { ar: '<span class="math-display">12.5 μC</span>', en: '<span class="math-display">12.5 μC</span>' },
+                        { ar: '<span class="math-display">0.08 μC</span>', en: '<span class="math-display">0.08 μC</span>' },
+                        { ar: '<span class="math-display">5.4 μC</span>', en: '<span class="math-display">5.4 μC</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'Q = λ·L = 5 × 0.4 = 2 μC', en: 'Q = λ·L = 5 × 0.4 = 2 μC' }
+                }
+            ]
+        },
+        {
+            id: 'sec3',
+            title: { ar: '🔹 القسم 3: قانون كولوم للتوزيعات المستمرة (Q11-Q15)', en: '🔹 Section 3: Coulomb\'s Law for Continuous Distributions (Q11-Q15)' },
+            questions: [
+                {
+                    q: { ar: 'ما صيغة المجال الكهربائي لعنصر شحنة dq على بعد r؟', en: 'What is electric field formula for charge element dq at distance r?' },
+                    svg: svgGraphs.integration_setup,
+                    options: [
+                        { ar: '<span class="math-display">dE = k·dq/r²</span>', en: '<span class="math-display">dE = k·dq/r²</span>' },
+                        { ar: '<span class="math-display">dE = k·dq/r</span>', en: '<span class="math-display">dE = k·dq/r</span>' },
+                        { ar: '<span class="math-display">dE = k·dq·r²</span>', en: '<span class="math-display">dE = k·dq·r²</span>' },
+                        { ar: '<span class="math-display">dE = k·r²/dq</span>', en: '<span class="math-display">dE = k·r²/dq</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'dE = k·dq/r² (نفس قانون كولوم لكن لعنصر صغير)', en: 'dE = k·dq/r² (same as Coulomb\'s law but for small element)' }
+                },
+                {
+                    q: { ar: 'لإيجاد المجال الكلي من توزيع مستمر، نستخدم:', en: 'To find total field from continuous distribution, we use:' },
+                    options: [
+                        { ar: 'التكامل: E = ∫dE', en: 'Integration: E = ∫dE' },
+                        { ar: 'الجمع البسيط: E = ΣdE', en: 'Simple sum: E = ΣdE' },
+                        { ar: 'الضرب: E = dE₁ × dE₂', en: 'Multiplication: E = dE₁ × dE₂' },
+                        { ar: 'الطرح: E = dE₁ - dE₂', en: 'Subtraction: E = dE₁ - dE₂' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'نكامل على كل التوزيع: E = ∫dE', en: 'We integrate over entire distribution: E = ∫dE' }
+                },
+                {
+                    q: { ar: 'في سلك مستقيم مشحون، r هي:', en: 'In straight charged wire, r is:' },
+                    options: [
+                        { ar: 'المسافة من عنصر الشحنة dq إلى نقطة المراقبة P', en: 'Distance from charge element dq to observation point P' },
+                        { ar: 'طول السلك', en: 'Length of wire' },
+                        { ar: 'المسافة من مركز السلك', en: 'Distance from center of wire' },
+                        { ar: 'نصف قطر السلك', en: 'Radius of wire' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'r = المسافة من dq إلى P = √(x² + y²)', en: 'r = distance from dq to P = √(x² + y²)' }
+                },
+                {
+                    q: { ar: 'ل سلك على المحور x من -a إلى +a، ونقطة P عند (0,y)، ما r؟', en: 'For wire on x-axis from -a to +a, and point P at (0,y), what is r?' },
+                    options: [
+                        { ar: '<span class="math-display">r = √(x² + y²)</span>', en: '<span class="math-display">r = √(x² + y²)</span>' },
+                        { ar: '<span class="math-display">r = x + y</span>', en: '<span class="math-display">r = x + y</span>' },
+                        { ar: '<span class="math-display">r = y</span>', en: '<span class="math-display">r = y</span>' },
+                        { ar: '<span class="math-display">r = a</span>', en: '<span class="math-display">r = a</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'r = √(x² + y²) (نظرية فيثاغورس)', en: 'r = √(x² + y²) (Pythagorean theorem)' }
+                },
+                {
+                    q: { ar: 'cos(θ) في الشكل (الزاوية بين dE والمحور y):', en: 'cos(θ) in figure (angle between dE and y-axis):' },
+                    options: [
+                        { ar: '<span class="math-display">cos(θ) = y/r</span>', en: '<span class="math-display">cos(θ) = y/r</span>' },
+                        { ar: '<span class="math-display">cos(θ) = x/r</span>', en: '<span class="math-display">cos(θ) = x/r</span>' },
+                        { ar: '<span class="math-display">cos(θ) = r/y</span>', en: '<span class="math-display">cos(θ) = r/y</span>' },
+                        { ar: '<span class="math-display">cos(θ) = y/x</span>', en: '<span class="math-display">cos(θ) = y/x</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'cos(θ) = y/r (المجاور/الوتر في المثلث القائم)', en: 'cos(θ) = y/r (adjacent/hypotenuse in right triangle)' }
+                }
+            ]
+        },
+        {
+            id: 'sec4',
+            title: { ar: '🔹 القسم 4: التكامل والتماثل (Q16-Q20)', en: '🔹 Section 4: Integration & Symmetry (Q16-Q20)' },
+            questions: [
+                {
+                    q: { ar: 'لماذا E = 0 لسلك متماثل حول المحور y؟', en: 'Why is E = 0 for wire symmetric about y-axis?' },
+                    svg: svgGraphs.symmetry_cancellation,
+                    options: [
+                        { ar: 'بسبب التماثل، المركبات الأفقية تلغي بعضها', en: 'Due to symmetry, horizontal components cancel' },
+                        { ar: 'لأن السلك لا يحمل شحنة', en: 'Because wire has no charge' },
+                        { ar: 'لأن y = 0', en: 'Because y = 0' },
+                        { ar: 'لأن λ = 0', en: 'Because λ = 0' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'لكل عنصر dq عند +x يوجد عنصر مساوٍ عند -x، مركباتهما الأفقية متساوية ومتعاكسة فتلغي بعضها', en: 'For each dq at +x there is equal dq at -x, their horizontal components are equal and opposite, canceling' }
+                },
+                {
+                    q: { ar: 'التكامل الصحيح لـ Eᵧ لسلك من -a إلى +a:', en: 'Correct integral for Eᵧ for wire from -a to +a:' },
+                    options: [
+                        { ar: '<span class="math-display">Eᵧ = 2∫₀ᵃ kλy·dx/(x²+y²)^(3/2)</span>', en: '<span class="math-display">Eᵧ = 2∫₀ᵃ kλy·dx/(x²+y²)^(3/2)</span>' },
+                        { ar: '<span class="math-display">Eᵧ = ∫ₐᵃ kλ·dx/(x²+y²)</span>', en: '<span class="math-display">Eᵧ = ∫₋ₐᵃ kλ·dx/(x²+y²)</span>' },
+                        { ar: '<span class="math-display">Eᵧ = kλ/a</span>', en: '<span class="math-display">Eᵧ = kλ/a</span>' },
+                        { ar: '<span class="math-display">Eᵧ = 0</span>', en: '<span class="math-display">Eᵧ = 0</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'Eᵧ = 2∫₀ kλy·dx/(x²+y²)^(3/2) (نضرب في 2 للاستفادة من التماثل)', en: 'Eᵧ = 2∫₀ᵃ kλy·dx/(x²+y²)^(3/2) (multiply by 2 to use symmetry)' }
+                },
+                {
+                    q: { ar: 'نتيجة التكامل ∫dx/(x²+y²)^(3/2) من 0 إلى a:', en: 'Result of integral ∫dx/(x²+y²)^(3/2) from 0 to a:' },
+                    options: [
+                        { ar: '<span class="math-display">a/(y²√(y²+a²))</span>', en: '<span class="math-display">a/(y²√(y²+a²))</span>' },
+                        { ar: '<span class="math-display">1/y²</span>', en: '<span class="math-display">1/y²</span>' },
+                        { ar: '<span class="math-display">a/y</span>', en: '<span class="math-display">a/y</span>' },
+                        { ar: '<span class="math-display">√(y²+a²)</span>', en: '<span class="math-display">√(y²+a²)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '₀ᵃ dx/(x²+y²)^(3/2) = a/(y²√(y²+a²))', en: '∫₀ᵃ dx/(x²+y²)^(3/2) = a/(y²√(y²+a²))' }
+                },
+                {
+                    q: { ar: 'المجال الكهربائي النهائي لسلك بطول 2a على بعد y:', en: 'Final electric field for wire of length 2a at distance y:' },
+                    options: [
+                        { ar: '<span class="math-display">Eᵧ = 2kλ·a/(y·√(y²+a²))</span>', en: '<span class="math-display">Eᵧ = 2kλ·a/(y·√(y²+a²))</span>' },
+                        { ar: '<span class="math-display">Eᵧ = kλ/y</span>', en: '<span class="math-display">Eᵧ = kλ/y</span>' },
+                        { ar: '<span class="math-display">Eᵧ = kλ/a</span>', en: '<span class="math-display">Eᵧ = kλ/a</span>' },
+                        { ar: '<span class="math-display">Eᵧ = 2kλ/y²</span>', en: '<span class="math-display">Eᵧ = 2kλ/y²</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'Eᵧ = 2kλ·a/(y·√(y²+a²))', en: 'Eᵧ = 2kλ·a/(y·√(y²+a²))' }
+                },
+                {
+                    q: { ar: 'عندما a → ∞ (سلك لا نهائي)، ماذا يحدث لـ a/√(y²+a²)؟', en: 'When a → ∞ (infinite wire), what happens to a/√(y²+a²)?' },
+                    options: [
+                        { ar: 'يقترب من 1', en: 'Approaches 1' },
+                        { ar: 'يقترب من 0', en: 'Approaches 0' },
+                        { ar: 'يقترب من ∞', en: 'Approaches ∞' },
+                        { ar: 'يبقى ثابتاً', en: 'Stays constant' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'عندما a → ∞: a/√(y²+a²) → a/a = 1', en: 'When a → ∞: a/√(y²+a²) → a/a = 1' }
+                }
+            ]
+        },
+        {
+            id: 'sec5',
+            title: { ar: '🔹 القسم 5: السلك اللانهائي (Q21-Q25)', en: '🔹 Section 5: Infinite Wire (Q21-Q25)' },
+            questions: [
+                {
+                    q: { ar: 'المجال الكهربائي لسلك لا نهائي مشحون بكثافة λ على بعد y:', en: 'Electric field of infinite charged wire with density λ at distance y:' },
+                    svg: svgGraphs.infinite_wire,
+                    options: [
+                        { ar: '<span class="math-display">E = 2kλ/y</span>', en: '<span class="math-display">E = 2kλ/y</span>' },
+                        { ar: '<span class="math-display">E = kλ/y²</span>', en: '<span class="math-display">E = kλ/y²</span>' },
+                        { ar: '<span class="math-display">E = kλ/y</span>', en: '<span class="math-display">E = kλ/y</span>' },
+                        { ar: '<span class="math-display">E = 2kλ/y²</span>', en: '<span class="math-display">E = 2kλ/y²</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'E = 2kλ/y (للسلك اللانهائي، المجال يتناسب مع 1/y وليس 1/y²)', en: 'E = 2kλ/y (for infinite wire, field proportional to 1/y not 1/y²)' }
+                },
+                {
+                    q: { ar: 'لماذا مجال السلك اللانهائي يتناسب مع 1/y وليس 1/y²؟', en: 'Why does infinite wire field vary as 1/y not 1/y²?' },
+                    options: [
+                        { ar: 'لأن السلك يمتد إلى ما لا نهاية، فيساهم كل جزء من السلك', en: 'Because wire extends to infinity, every part contributes' },
+                        { ar: 'لأن λ كبيرة جداً', en: 'Because λ is very large' },
+                        { ar: 'لأن y صغيرة', en: 'Because y is small' },
+                        { ar: 'لا سبب محدد', en: 'No specific reason' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'السلك اللانهائي له مساهمة من جميع الأجزاء البعيدة، مما يغير الاعتماد من 1/r² إلى 1/y', en: 'Infinite wire has contributions from all distant parts, changing dependence from 1/r² to 1/y' }
+                },
+                {
+                    q: { ar: 'إذا كانت λ = 2 μC/m، ما المجال على بعد y = 0.1 m من سلك لا نهائي؟', en: 'If λ = 2 μC/m, what is field at y = 0.1 m from infinite wire?' },
+                    options: [
+                        { ar: '<span class="math-display">3.6 × 10⁵ N/C</span>', en: '<span class="math-display">3.6 × 10⁵ N/C</span>' },
+                        { ar: '<span class="math-display">1.8 × 10⁵ N/C</span>', en: '<span class="math-display">1.8 × 10⁵ N/C</span>' },
+                        { ar: '<span class="math-display">3.6 × 10⁴ N/C</span>', en: '<span class="math-display">3.6 × 10⁴ N/C</span>' },
+                        { ar: '<span class="math-display">1.8 × 10⁴ N/C</span>', en: '<span class="math-display">1.8 × 10⁴ N/C</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'E = 2kλ/y = 2(9×10⁹)(2×10⁻)/0.1 = 3.6×10⁵ N/C', en: 'E = 2kλ/y = 2(9×10⁹)(2×10⁻)/0.1 = 3.6×10⁵ N/C' }
+                },
+                {
+                    q: { ar: 'اتجاه المجال الكهربائي لسلك موجب لا نهائي:', en: 'Direction of electric field for positive infinite wire:' },
+                    options: [
+                        { ar: 'شعاعياً للخارج (عمودي على السلك)', en: 'Radially outward (perpendicular to wire)' },
+                        { ar: 'موازياً للسلك', en: 'Parallel to wire' },
+                        { ar: 'دائرياً حول السلك', en: 'Circular around wire' },
+                        { ar: 'عشوائياً', en: 'Random' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'المجال شعاعي للخارج (عمودي على السلك) بسبب التماثل', en: 'Field is radially outward (perpendicular to wire) due to symmetry' }
+                },
+                {
+                    q: { ar: 'إذا ضاعفنا المسافة y من سلك لا نهائي، ماذا يحدث للمجال؟', en: 'If we double distance y from infinite wire, what happens to field?' },
+                    options: [
+                        { ar: 'يقل إلى النصف', en: 'Decreases to half' },
+                        { ar: 'يقل إلى الربع', en: 'Decreases to quarter' },
+                        { ar: 'يتضاعف', en: 'Doubles' },
+                        { ar: 'يبقى ثابتاً', en: 'Stays constant' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'E ∝ 1/y، إذا y → 2y فإن E → E/2', en: 'E ∝ 1/y, if y → 2y then E → E/2' }
+                }
+            ]
+        },
+        {
+            id: 'sec6',
+            title: { ar: '🔹 القسم 6: تطبيقات ومسائل مركبة (Q26-Q30)', en: '🔹 Section 6: Applications & Mixed Problems (Q26-Q30)' },
+            questions: [
+                {
+                    q: { ar: 'سلك بطول 1 m و λ = 4 μC/m. ما الشحنة الكلية؟', en: 'Wire of length 1 m and λ = 4 μC/m. What is total charge?' },
+                    options: [
+                        { ar: '<span class="math-display">4 μC</span>', en: '<span class="math-display">4 μC</span>' },
+                        { ar: '<span class="math-display">2 μC</span>', en: '<span class="math-display">2 μC</span>' },
+                        { ar: '<span class="math-display">8 μC</span>', en: '<span class="math-display">8 μC</span>' },
+                        { ar: '<span class="math-display">1 μC</span>', en: '<span class="math-display">1 μC</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'Q = λ·L = 4 × 1 = 4 μC', en: 'Q = λ·L = 4 × 1 = 4 μC' }
+                },
+                {
+                    q: { ar: 'حلقة دائرية مشحونة بكثافة λ. المجال في المركز:', en: 'Circular ring charged with density λ. Field at center:' },
+                    options: [
+                        { ar: 'صفر (بسبب التماثل)', en: 'Zero (due to symmetry)' },
+                        { ar: 'kλ/R', en: 'kλ/R' },
+                        { ar: '2kλ/R', en: '2kλ/R' },
+                        { ar: 'kλ/R²', en: 'kλ/R²' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'المجال في مركز الحلقة = 0 بسبب التماثل الكامل', en: 'Field at center of ring = 0 due to complete symmetry' }
+                },
+                {
+                    q: { ar: 'قرص دائري مشحون بكثافة سطحية σ. المجال على المحور:', en: 'Circular disk charged with surface density σ. Field on axis:' },
+                    options: [
+                        { ar: 'يعتمد على σ و R و y (يحتاج تكامل)', en: 'Depends on σ, R, and y (requires integration)' },
+                        { ar: 'صفر دائماً', en: 'Always zero' },
+                        { ar: 'kσ/R', en: 'kσ/R' },
+                        { ar: '2kσ', en: '2kσ' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'مجال القرص على المحور يحتاج تكامل ويعتمد على σ و R و y', en: 'Disk field on axis requires integration and depends on σ, R, and y' }
+                },
+                {
+                    q: { ar: 'لصفيحة لا نهائية مشحونة بكثافة σ، المجال:', en: 'For infinite charged plate with density σ, field:' },
+                    options: [
+                        { ar: '<span class="math-display">E = σ/(2ε₀)</span> (ثابت، لا يعتمد على المسافة)', en: '<span class="math-display">E = σ/(2ε₀)</span> (constant, independent of distance)' },
+                        { ar: '<span class="math-display">E = σ/ε₀</span>', en: '<span class="math-display">E = σ/ε₀</span>' },
+                        { ar: '<span class="math-display">E = kσ/y</span>', en: '<span class="math-display">E = kσ/y</span>' },
+                        { ar: '<span class="math-display">E = kσ/y²</span>', en: '<span class="math-display">E = kσ/y²</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'E = σ/(2ε₀) (مجال ثابت لا يعتمد على المسافة من الصفيحة)', en: 'E = σ/(2ε₀) (constant field independent of distance from plate)' }
+                },
+                {
+                    q: { ar: 'ما الفرق الأساسي بين مجال شحنة نقطية ومجال سلك لا نهائي؟', en: 'What is the fundamental difference between point charge field and infinite wire field?' },
+                    options: [
+                        { ar: 'الشحنة النقطية: E ∝ 1/r²، السلك: E ∝ 1/r', en: 'Point charge: E ∝ 1/r², wire: E ∝ 1/r' },
+                        { ar: 'لا فرق', en: 'No difference' },
+                        { ar: 'كلاهما ∝ 1/r²', en: 'Both ∝ 1/r²' },
+                        { ar: 'كلاهما  1/r', en: 'Both ∝ 1/r' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'الشحنة النقطية: E ∝ 1/r²، السلك اللانهائي: E ∝ 1/r (أبطأ في التناقص)', en: 'Point charge: E  1/r², infinite wire: E  1/r (decreases more slowly)' }
+                }
+            ]
+        }
+    ]
+};
+
+function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function prepareShuffledExam() {
+    rng = mulberry32(currentSeed);
+    examData = JSON.parse(JSON.stringify(originalExamData));
+    correctAnswersMap = {};
+    let globalIdx = 0;
+    examData.sections.forEach((section) => {
+        section.questions = shuffleArray(section.questions);
+        section.questions.forEach((q) => {
+            const optionsWithCorrect = q.options.map((opt, idx) => ({ option: opt, isCorrect: idx === q.correct }));
+            const shuffledOptions = shuffleArray(optionsWithCorrect);
+            q.options = shuffledOptions.map(o => o.option);
+            q.correct = shuffledOptions.findIndex(o => o.isCorrect);
+            correctAnswersMap[globalIdx] = String.fromCharCode(97 + q.correct);
+            globalIdx++;
+        });
+    });
+}
+
+function reshuffleExam() {
+    const msg = currentLang === 'ar' ? ' سيتم إنشاء أسئلة جديدة ومسح إجاباتك. هل أنت متأكد؟' : '🔄 New questions will be generated. Are you sure?';
+    if (confirm(msg)) {
+        currentSeed = Date.now(); timeRemaining = TOTAL_TIME; answersVisible = false;
+        prepareShuffledExam(); renderExam(); saveState();
+        alert(currentLang === 'ar' ? '🎲 تم تغيير الأسئلة! حظاً موفقاً! 🍀' : '🎲 Questions changed! Good luck! 🍀');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function setLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.body.classList.toggle('en-mode', lang === 'en');
+    renderExam(); saveState(false);
+}
+
+function renderExam() {
+    const container = document.getElementById('exam-content');
+    const labels = { ar: { option: ['أ', 'ب', 'ج', 'د'], answer: '✅ الإجابة:' }, en: { option: ['A', 'B', 'C', 'D'], answer: '✅ Answer:' } };
+    const lbl = labels[currentLang];
+    let html = '';
+    let globalIdx = 0;
+    
+    examData.sections.forEach((section, secIdx) => {
+        const badgeClass = ['module-1', 'module-2', 'module-3', 'module-4', 'module-5', 'module-6'][secIdx];
+        html += '<section class="bg-white p-6 rounded-2xl shadow-lg border-2 border-amber-100">';
+        html += '<div class="text-center mb-4"><span class="module-badge ' + badgeClass + '">' + section.title[currentLang] + '</span></div>';
+        html += '<ol class="space-y-4 text-sm">';
+        
+        section.questions.forEach((q) => {
+            html += '<li class="border-r-4 border-amber-400 pr-4 py-2" id="q-' + globalIdx + '">';
+            html += '<strong class="text-amber-700">' + (globalIdx + 1) + '.</strong> <span class="arabic-math">' + q.q[currentLang] + '</span><br>';
+            if (q.svg) html += '<div class="graph-container">' + q.svg + '</div>';
+            
+            q.options.forEach((opt, oIdx) => {
+                html += '<label class="cursor-pointer block mt-2 mr-4 hover:bg-amber-50 rounded-lg p-2 transition">';
+                html += '<input type="radio" name="q' + globalIdx + '" value="' + String.fromCharCode(97 + oIdx) + '" class="mr-2 ml-2">';
+                html += '<span class="arabic-math">' + lbl.option[oIdx] + ') ' + opt[currentLang] + '</span>';
+                html += '</label>';
+            });
+            
+            html += '<div class="answer-box text-green-700 mt-3 font-medium ' + (answersVisible ? '' : 'hidden') + ' bg-green-50 rounded-lg p-3 border border-green-200">';
+            html += lbl.answer + ' ' + lbl.option[q.correct] + ') <span class="arabic-math">' + q.options[q.correct][currentLang] + '</span><br>';
+            html += '<span class="text-sm text-green-700 mt-2 block arabic-math">' + q.answer[currentLang] + '</span>';
+            html += '</div></li>';
+            globalIdx++;
+        });
+        
+        html += '</ol></section>';
+    });
+    
+    container.innerHTML = html;
+}
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeRemaining--;
+        updateTimerDisplay();
+        if (timeRemaining % 60 === 0) saveState(false);
+        if (timeRemaining <= 600) document.getElementById('timer').classList.add('timer-warning');
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            alert(" انتهى الوقت!");
+            gradeExam();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeRemaining / 60);
+    const s = timeRemaining % 60;
+    document.getElementById('timer').textContent = m.toString().padStart(2,'0') + ':' + s.toString().padStart(2,'0');
+}
+
+function toggleAnswers() {
+    answersVisible = !answersVisible;
+    document.querySelectorAll('.answer-box').forEach(el => el.classList.toggle('hidden', !answersVisible));
+    saveState(false);
+}
+
+function gradeExam() {
+    let correctCount = 0;
+    const sectionScores = new Array(TOTAL_SECTIONS).fill(0);
+    
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+        const sel = document.querySelector('input[name="q'+i+'"]:checked');
+        const li = document.getElementById('q-' + i);
+        if (li) {
+            const isCorrect = sel && sel.value === correctAnswersMap[i];
+            if (isCorrect) {
+                correctCount++;
+                li.classList.add('correct');
+                li.classList.remove('incorrect');
+                sectionScores[Math.floor(i / QUESTIONS_PER_SECTION)]++;
+            } else {
+                li.classList.add('incorrect');
+                li.classList.remove('correct');
+            }
+        }
+    }
+    
+    const score = Math.round((correctCount / TOTAL_QUESTIONS) * 100);
+    document.getElementById('res-total').textContent = score + ' / 100';
+    document.getElementById('res-name').textContent = document.getElementById('studentName').value || 'بطل';
+    document.getElementById('res-date').textContent = new Date().toLocaleDateString('ar-AE');
+    
+    const pc = document.getElementById('sections-performance');
+    pc.innerHTML = '';
+    examData.sections.forEach((s, idx) => {
+        pc.innerHTML += '<div class="flex justify-between items-center p-3 bg-white rounded-lg"><span class="text-gray-700">' + s.title[currentLang] + '</span><span class="font-bold text-amber-700">' + sectionScores[idx] + '/' + QUESTIONS_PER_SECTION + '</span></div>';
+    });
+    
+    const badge = document.getElementById('success-badge');
+    document.getElementById('success-percent').textContent = score + '%';
+    
+    if (currentLang === 'ar') {
+        if (score >= 90) { badge.textContent = '🌟 ممتاز جداً!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 ممتاز!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = ' جيد'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 حاول مرة أخرى'; badge.className = 'success-badge grade-fail'; }
+    } else {
+        if (score >= 90) { badge.textContent = ' Outstanding!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 Excellent!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = '👍 Good'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 Try Again'; badge.className = 'success-badge grade-fail'; }
+    }
+    
+    document.getElementById('results-panel').classList.remove('hidden');
+    document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+    if (timerInterval) clearInterval(timerInterval);
+}
+
+function sendResultsToEmail() {
+    const btn = document.getElementById('sendEmailBtn');
+    const status = document.getElementById('emailStatus');
+    btn.disabled = true;
+    btn.textContent = '⏳ جاري الإرسال...';
+    
+    const name = document.getElementById('studentName').value || 'غير محدد';
+    const studentClass = document.getElementById('studentClass').value || 'غير محدد';
+    const date = document.getElementById('examDate').value || new Date().toLocaleDateString();
+    const score = document.getElementById('res-total').textContent;
+    const successRate = document.getElementById('success-percent').textContent;
+    const badge = document.getElementById('success-badge').textContent;
+    
+    let questionsHTML = '<table style="width:100%; border-collapse: collapse; font-family: Arial; font-size: 12px; direction: rtl;">';
+    questionsHTML += '<thead><tr style="background:#d97706; color:white;"><th style="padding:8px; border:1px solid #ddd;">#</th><th style="padding:8px; border:1px solid #ddd;">السؤال</th><th style="padding:8px; border:1px solid #ddd;">إجابة الطالب</th><th style="padding:8px; border:1px solid #ddd;">الصحيحة</th><th style="padding:8px; border:1px solid #ddd;">النتيجة</th></tr></thead><tbody>';
+    
+    let globalIdx = 0;
+    examData.sections.forEach((section) => {
+        questionsHTML += '<tr style="background:#fef3c7;"><td colspan="5" style="padding:8px; font-weight:bold; border:1px solid #ddd;">' + section.title.ar + '</td></tr>';
+        section.questions.forEach((q) => {
+            const sel = document.querySelector('input[name="q'+globalIdx+'"]:checked');
+            const sv = sel ? sel.value : null;
+            const cv = correctAnswersMap[globalIdx];
+            const ic = sv === cv;
+            let sat = '❌ لم يجب';
+            let sac = '#dc2626';
+            if (sv) {
+                const si = sv.charCodeAt(0) - 97;
+                sat = q.options[si].ar;
+                sac = ic ? '#16a34a' : '#dc2626';
+            }
+            const cat = q.options[q.correct].ar;
+            const rb = ic ? '#f0fdf4' : '#fef2f2';
+            questionsHTML += '<tr style="background:' + rb + ';"><td style="padding:8px; border:1px solid #ddd; text-align:center;">' + (globalIdx+1) + '</td><td style="padding:8px; border:1px solid #ddd;">' + q.q.ar + '</td><td style="padding:8px; border:1px solid #ddd; color:' + sac + ';">' + sat + '</td><td style="padding:8px; border:1px solid #ddd; color:#16a34a;">' + cat + '</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">' + (ic?'✅':'❌') + '</td></tr>';
+            globalIdx++;
+        });
+    });
+    questionsHTML += '</tbody></table>';
+    
+    const templateParams = {
+        to_email: TARGET_EMAIL,
+        student_name: name,
+        student_class: studentClass,
+        exam_date: date,
+        total_score: score,
+        success_rate: successRate,
+        grade: badge,
+        answers_table: questionsHTML
+    };
+    
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+        .then(() => {
+            status.textContent = '✅ تم الإرسال بنجاح!';
+            status.style.color = '#16a34a';
+            btn.textContent = '✓ تم';
+            alert('تم إرسال النتيجة للمعلم بنجاح!');
+        })
+        .catch((error) => {
+            status.textContent = '❌ فشل الإرسال';
+            status.style.color = '#dc2626';
+            btn.disabled = false;
+            btn.textContent = '📧 حاول مرة أخرى';
+            alert('فشل الإرسال: ' + error.text);
+        });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const saved = loadState();
+    if (saved && saved.seed) {
+        currentSeed = saved.seed;
+        currentLang = saved.lang || 'ar';
+        timeRemaining = saved.timeRemaining !== undefined ? saved.timeRemaining : TOTAL_TIME;
+        answersVisible = saved.answersVisible || false;
+        document.getElementById('btn-ar').classList.toggle('active', currentLang === 'ar');
+        document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
+        document.body.classList.toggle('en-mode', currentLang === 'en');
+    } else {
+        currentSeed = Date.now();
+    }
+    prepareShuffledExam();
+    renderExam();
+    if (saved) {
+        if (saved.studentName) document.getElementById('studentName').value = saved.studentName;
+        if (saved.studentClass) document.getElementById('studentClass').value = saved.studentClass;
+        if (saved.examDate) document.getElementById('examDate').value = saved.examDate;
+        if (saved.answers) restoreAnswers(saved.answers);
+    }
+    setupAnswerListeners();
+    setupInputListeners();
+    startTimer();
+});
+window.addEventListener('beforeunload', () => saveState(false));
+</script>
+</body>
+</html>
